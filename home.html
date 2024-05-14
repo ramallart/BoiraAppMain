@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mask</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../node_modules/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/markers.css" />
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
+
+        .leaflet-container {
+            cursor: default;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script type="text/javascript" src='../js/leaflet.mask.js'></script>
+</head>
+
+<body class="bg-dark">
+    <div class="container wrapper d-flex align-items-center justify-content-center">
+        <div id='map' style="height:600px;width:400px"></div>
+    </div>
+    <script type="text/javascript">
+        var map = L.map("map", {
+            center: [41.615, 0.625],
+            zoom: 14
+        });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.mask('bound.json', { fillOpacity: 0.9 }).addTo(map);
+
+		map.showMarkers();
+        map.showUserLocation();
+        map.removeMaskAtUserLocation();
+        map.centerMapToUserLocation();
+        map.setMaxMinZoom();
+        map.addStandardControls();
+        
+
+    </script>
+
+</html>

@@ -1,0 +1,380 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro%3Awght%40300%3B400%3B600%3B700&display=swap');
+
+*
+{
+    margin: 0;
+    padding: 0;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+:root
+{
+    --textColor     : #666666;
+    --borderColor   : #e5e5e5;
+    --blackColor    : #000000;
+    --whiteColor    : #ffffff;
+    --creamColor    : #f4f7f0;
+    --brownColor    : #f2eee3;
+    --blueColor     : #c9d7d8;
+    --greenColor    : #9babb2;
+    --darkColor     : #7c9194;
+    --purpleColor   : #ede9ef;
+    --violetColor   : #d4cbda;
+    --fs14          :   1.4rem;
+    --fs16          :   1.6rem;
+    --fs20          :     2rem;
+}
+
+html
+{
+    font-size       : 62.5%;
+    scroll-behavior : smooth;
+}
+
+ul
+{
+    list-style      : none ;
+}
+
+a
+{
+    text-decoration : none;
+}
+
+img
+{
+    max-width       : 100%;
+}
+
+body
+{
+    line-height     : 1;
+    font-weight     : 400;
+}
+
+h3, h4
+{
+    font-weight     : 600;
+}
+
+h4, p, span
+{
+    font-size       : var(--fs14);
+}
+
+p
+{
+    color           : var(--textColor);
+    line-height     : 2.4rem;
+}
+
+.container
+{
+    padding-left    : 1.5rem;
+    padding-right   : 1.5rem;
+    margin-left     : auto;
+    margin-right    : auto;
+    width           : 100;
+}
+
+@media(min-width: 576px)
+{
+    .container
+    {
+        width       : 540px;
+    }
+}
+
+@media(min-width: 768px)
+{
+    .container
+    {
+        width       : 720px;
+    }
+}
+
+@media(min-width: 992px)
+{
+    .container
+    {
+        width       : 960px;
+    }
+}
+
+@media(min-width: 1200px)
+{
+    .container
+    {
+        width       : 1140px;
+    }
+}
+
+.btn
+{
+    text-transform  : capitalize;
+    color           : var(--whiteColor);
+    font-size       : var(--fs16);
+    padding         : 1.2rem 2.7rem;
+    border          : none;
+    border-radius   : .3rem;
+    cursor          : pointer;
+}
+
+.c-black
+{
+    color           : var(--blackColor);
+}
+
+.c-white
+{
+    color           : var(--whiteColor);
+}
+
+.c-cream
+{
+    color           : var(--creamColor);
+}
+
+.c-brown
+{
+    color           : var(--brownColor);
+}
+
+.c-blue
+{
+    color           : var(--blueColor);
+}
+
+.c-green
+{
+    color           : var(--greenColor);
+}
+
+.c-dark
+{
+    color           : var(--darkColor);
+}
+
+.c-purple
+{
+    color           : var(--purpleColor);
+}
+
+.c-violet
+{
+    color           : var(--violetColor);
+}
+
+.bg-dark
+{
+    background-color: var(--darkColor);
+}
+
+.bg-violet
+{
+    background-color: var(--violetColor);
+}
+
+.bg-cream
+{
+    background-color: var(--creamColor);
+}
+
+.t-capitalize
+{
+    text-transform  : capitalize;
+}
+
+.t-uppercase
+{
+    text-transform  : uppercase;
+}
+
+.t-c
+{
+    text-align      : center;
+}
+
+.fs-14
+{
+    font-size       : var(--fs14);
+}
+
+.fs-16
+{
+    font-size       : var(--fs16);
+}
+
+.fs-20
+{
+    font-size       : var(--fs20);
+}
+
+.outline-0
+{
+    outline         : none;
+}
+
+.b-0
+{
+    border          : none;
+}
+
+.b.t-l-3
+{
+    border-top-left-radius: .3rem;
+}
+
+.b.t-r-3
+{
+    border-top-right-radius: .3rem;
+}
+
+.b.b-l-3
+{
+    border-bottom-left-radius: .3rem;
+}
+
+.b.b-r-3
+{
+    border-bottom-right-radius: .3rem;
+}
+
+.b-rd-3
+{
+    border-radius       : .3rem;
+}
+
+.b-rd-50
+{
+    border-radius       : 50%;
+}
+
+.pointer
+{
+    cursor              : pointer;
+}
+
+.w-100
+{
+    width               : 100%;
+}
+
+.d-flex
+{
+    display             : flex;
+}
+
+.d-grid
+{
+    display             : grid;
+}
+
+.d-block
+{
+    display             : block;
+}
+
+.d-none
+{
+    display             : none;
+}
+
+.align-items-center
+{
+    align-items         : center;
+}
+
+.justify-content-space-between
+{
+    justify-content     : space-between;
+}
+
+.justify-content-center
+{
+    justify-content     : center;
+}
+
+.flex-wrap-wrap
+{
+    flex-wrap           : wrap;
+}
+
+.flex-d-column
+{
+    flex-direction      : column;
+}
+
+.p-relative
+{
+    position            : relative;
+}
+
+.p-absolute
+{
+    position            : absolute;
+}
+
+@media(min-width: 768px)
+{
+    .d-m-flex
+    {
+        display         : flex;
+    }
+    
+    .d-m-row
+    {
+        flex-direction  : row;
+    }
+}
+
+@media(min-width: 992px)
+{
+    .d-l-flex
+    {
+        display         : flex;
+    }
+    
+    .d-l-block
+    {
+        display         : block;
+    }
+
+    .d-l-row
+    {
+        flex-direction  : row;
+    }
+}
+
+@media(min-width: 1200px)
+{
+    .d-xl-none
+    {
+        display         : none !important;
+    }
+
+    .d-xl-flex
+    {
+        display         : flex;
+    }
+
+    .flex-d-xl-column
+    {
+        flex-direction  : column;
+    }
+
+    .align-items-xl-center
+    {
+        align-items     : center;
+    }
+
+    .d-xl-row
+    {
+        flex-direction  : row;
+    }
+
+    .p-xl-relative
+    {
+        position        : relative;
+    }
+}

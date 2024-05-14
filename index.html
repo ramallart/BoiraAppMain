@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset       = "UTF-8">
+        <meta http-equiv    = "X-UA-Compatible">
+        <meta name          = "viewport" content = "width=device-width, initial-scale=1.0">
+        <link rel           = "stylesheet" href = "css/general.css">
+        <link rel           = "stylesheet" href = "css/style.css">
+        <title>Boira</title>
+    </head>
+    <body class = "bg-dark">
+        <script src = "https://kit.fontawesome.com/9e5ba2e3f5.js" crossorigin = "anonymous"></script>
+        <script type="text/javascript" src = "../js/index.js"></script>
+        <div class = "container wrapper d-flex align-items-center justify-content-center">
+            <div class = "sign-in-page bg-cream b-rd-3 d-l-flex">
+                <div class = "header p-relative">
+                    <img src = "img/logoBoira.png" width = "50">
+                    <p>
+                        Boira és una aplicació pensada per al món real. Surt al carrer i gaudeix de Lleida!
+                    </p>
+                    <div class="right d-none d-l-block">
+                        <img src = "img/logoBoira.png" width = "200">
+                    </div>
+                </div>
+                <div class="main p-relative">
+                    <div class="switcher d-flex align-items-center">
+                        <a href = "#" class = "sign-in c-black fs-14 active" data-section = "sign-in-sec" >Entrar</a>
+                        <a href = "#" class = "sign-up c-black fs-14" data-section = "sign-up-sec">Registrar-se</a>
+                    </div>
+                    <div class="sec sign-in-sec d-none active">
+                        <h3 class = "c-black p-relative">Entrar</h3>
+                        <form action="home.html" class = "d-flex flex-d-column">
+                            <div class = "form-group">
+                                <div class = "inner-input fs-14 c-blue d-flex align-items-center">
+                                    <i class = "fas fa-user"></i>
+                                    <input type = "text" placeholder = "Usuari" class = "outline-0 b-0 w-100">
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <div class = "inner-input fs-14 c-blue d-flex align-items-center">
+                                    <i class = "fas fa-lock"></i>
+                                    <input type = "password" placeholder = "Contrassenya" class = "outline-0 b-0 w-100">
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <div class = "inner-input fs-14 c-blue d-flex align-items-center justify-content-space-between">
+                                    <div class = "check d-flex align-items-center">
+                                        <input type = "checkbox" name="" id="rm" class = "d-none">
+                                        <label for = "rm">
+                                            <span class = "p-relative b-rd-50 pointer"></span>
+                                        </label>
+                                        <small class = "c-black fs-14">Recorda'm</small>
+                                    </div>
+                                    <a href = "#" class = "t-cataaize c-black fs-14">Recuperar contrassenya</a>
+                                </div>
+                                <div class = "form-group">
+                                    <button type = "submit" class = "btn bg-violet">Entrar</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class = "login-resources">
+                            <h4 class = "t-uppercase c-black">Entrar amb...</h4>
+                            <div class = "social d-flex align-items-center flex-wrap-wrap flex-d-xl-column">
+                                <a href = "#" class = "t-catalize c-black d-flex align-items-center b-rd-3">
+                                    <i class = "fab fa-google"></i>
+                                    Entrar amb Google
+                                </a>
+                                <a href = "#" class = "t-catalize c-black d-flex align-items-center b-rd-3">
+                                    <i class = "fab fa-instagram"></i>
+                                    Entrar amb Instagram
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "sec sign-up-sec d-none">
+                        <h3 class = "c-black p-relative">Registrar-se</h3>
+                        <form action = "#" class = "d-flex flex-d-column">
+                            <div class = "form-group">
+                                <div class = "inner-input fs-14 c-blue d-flex align-items-center">
+                                    <i class = "fas fa-at"></i>
+                                    <input type = "email" placeholder = "Correu electrònic" class = "outline-0 b-0 w-100" required>
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <div class = "inner-input fs-14 c-blue d-flex align-items-center">
+                                    <i class = "fas fa-user"></i>
+                                    <input type = "text" placeholder = "Usuari" class = "outline-0 b-0 w-100">
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <div class = "inner-input fs-14 c-blue d-flex align-items-center">
+                                    <i class = "fas fa-globe-europe"></i>
+                                    <input type = "text" placeholder = "País" class = "outline-0 b-0 w-100">
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <div class = "inner-input fs-14 c-blue d-flex align-items-center">
+                                    <i class = "fas fa-lock"></i>
+                                    <input type = "password" placeholder = "Contrassenya" class = "outline-0 b-0 w-100">
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <div class = "inner-input fs-14 c-blue d-flex align-items-center">
+                                    <i class = "fas fa-lock"></i>
+                                    <input type = "password" placeholder = "Repetir contrassenya" class = "outline-0 b-0 w-100">
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <div class = "inner-input c-blue d-flex align-items-center justify-content-center justify-content-space-between">
+                                    <div class = "check d-flex align-items-center">
+                                        <input type = "checkbox" name = "" id = "Confirmar" class = "d-none">
+                                        <label for = "Confirmar">
+                                            <span class = "p-relative b-rd-50 pointer"></span>
+                                        </label>
+                                        <small class = "c-black fs-14">Sí, entenc i accepto els Termes i Condicions.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "form-group">
+                                <button type = "submit" class = "btn bg-violet t-catalize">Registrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

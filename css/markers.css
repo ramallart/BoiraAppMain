@@ -1,0 +1,6 @@
+.custom-popup {
+    background-color: var(--greenColor);
+    color: var(--greenColor);
+    border-radius: 5px;
+    padding: 10px;
+}
