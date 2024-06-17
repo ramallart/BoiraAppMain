@@ -19,13 +19,16 @@
             weight: 2,
             fillColor: "#FFFFFF",
             fillOpacity: 1,
+
             interactive: false,
+
             fitBounds: true,
             restrictBounds: true,
         },
 
         initialize: function (geojson, options) {
             L.Util.setOptions(this, options);
+
             this._layers = {};
             this._bounds = new L.LatLngBounds();
             this._maskPolygonCoords = [
@@ -48,12 +51,10 @@
                 }
             }
         },
-
         addData: function (geojson) {
             this.addObject(geojson);
             this.addMaskLayer();
         },
-
         addObject: function (json) {
             var i, len;
             if (L.Util.isArray(json)) {
@@ -77,6 +78,7 @@
                             this.addObject(geometries[i]);
                         }
                         return;
+
                     case "Polygon":
                         this.addRemovalPolygonCoordinates(json.coordinates);
                         return;
@@ -88,20 +90,17 @@
                 }
             }
         },
-
         addRemovalPolygonCoordinates: function (coords) {
             for (var i = 0, len = coords.length; i < len; i++) {
                 this._maskPolygonCoords.push(coords[i]);
                 this.updateBounds(coords[i]);
             }
         },
-
         addRemovalMultiPolygonCoordinates: function (coords) {
             for (var i = 0, len = coords.length; i < len; i++) {
                 this.addRemovalPolygonCoordinates(coords[i]);
             }
         },
-
         updateBounds: function (coords) {
             for (var i = 0, len = coords.length; i < len; i++) {
                 var coords2 = coords[i];
@@ -110,7 +109,6 @@
                 }
             }
         },
-
         addMaskLayer: function () {
             var latlngs = this.coordsToLatLngs(this._maskPolygonCoords);
             var layer = new L.Polygon(latlngs, this.options);
@@ -122,7 +120,6 @@
                 this._map.setMaxBounds(this._bounds);
             }
         },
-
         dimension: function (arr) {
             var j = 1;
             for (var i in arr) {
@@ -134,11 +131,9 @@
             }
             return j;
         },
-
         coordsToLatLng: function (coords) {
             return new L.LatLng(coords[1], coords[0], coords[2]);
         },
-
         coordsToLatLngs: function (coords) {
             var latlngs = [];
             var dimensions = this.dimension(coords);
@@ -153,7 +148,6 @@
 
             return latlngs;
         },
-
         request: function (url, success, error) {
             var xhr = new XMLHttpRequest();
             xhr.responseType = "json";
@@ -178,90 +172,5 @@
     L.mask = function (geojson, options) {
         return new L.Mask(geojson, options);
     };
-
-    // Afegir funció per mostrar la ubicació de l'usuari
-    L.Map.include({
-        showUserLocation: function () {
-            var map = this;
-            map.locate({ setView: true, maxZoom: 16 });
-        }
-    });
-
-    // Afegir funció per esborrar la màscara pels llocs on passi l'usuari
-    L.Mask.include({
-        removeMaskAtUserLocation: function () {
-            var mask = this;
-            mask._map.on('locationfound', function (e) {
-                mask.eachLayer(function (layer) {
-                    if (layer instanceof L.Polygon) {
-                        if (layer.getBounds().contains(e.latlng)) {
-                            mask.removeLayer(layer);
-                        }
-                    }
-                });
-            });
-        }
-    });
-
-    // Afegir funció per centrar el mapa a la ubicació de l'usuari
-    L.Map.include({
-        centerMapToUserLocation: function () {
-            var map = this;
-            map.on('locationfound', function (e) {
-                map.setView(e.latlng);
-            });
-        }
-    });
-
-    // Afegir funció per limitar el zoom màxim i mínim del mapa
-    L.Map.include({
-        setMaxMinZoom: function () {
-            var map = this;
-            map.setMinZoom(5); // Estableix el zoom mínim a 5
-            map.setMaxZoom(18); // Estableix el zoom màxim a 18
-        }
-    });
-
-    // Afegir funció per afegir els comandaments estàndards de manipulació del mapa
-    L.Map.include({
-        addStandardControls: function () {
-            var map = this;
-            L.control.zoom({ position: 'topright' }).addTo(map); // Afegir control de zoom a la cantonada superior dreta
-            L.control.scale().addTo(map); // Afegir escala al mapa
-        }
-    });
-
-    L.Map.include({
-        showUserLocation: function () {
-            var map = this;
-            map.locate({ setView: true, maxZoom: 16 });
     
-            function onLocationFound(e) {
-                var radius = e.accuracy / 2;
-    
-                L.marker(e.latlng).addTo(map)
-                    .bindPopup("You are within " + radius + " meters from this point").openPopup();
-    
-                L.circle(e.latlng, radius).addTo(map);
-            }
-    
-            map.on('locationfound', onLocationFound);
-        }
-    });
-
-    L.Map.include({
-        showMarkers: function() {
-            // Definir les coordenades del marcador
-            var markerCoords = [41.615, 0.625];
-
-            // Crear el marcador
-            var marker = L.marker(markerCoords).addTo(map);
-
-            // Opcionalment, afegir un popup al marcador
-            marker.bindPopup("<b>Hello world!</b><br>I am a popup.", {
-                className: 'custom-popup'
-            });
-        }
-    });
-
 }, window);

@@ -2,12 +2,12 @@
 <html>
 
 <head>
-    <title>Mask</title>
+    <title>Boira</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="../node_modules/leaflet/dist/leaflet.css">
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/markers.css" />
+    <link rel="stylesheet" href="css/markers.css" />
     <style type="text/css">
         body {
             padding: 0;
@@ -23,9 +23,40 @@
         .leaflet-container {
             cursor: default;
         }
+
+        /* Estil personalitzat per a les pestanyes dels popups */
+        .popup-tabs {
+            display: flex;
+            justify-content: space-around;
+            cursor: pointer;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .popup-tab {
+            padding: 5px 10px;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .popup-tab.active {
+            border-bottom: 2px solid #007bff;
+            font-weight: bold;
+        }
+
+        .popup-content {
+            display: none;
+        }
+
+        .popup-content.active {
+            display: block;
+        }
+
+        .popup-container {
+            max-width: 250px;
+        }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script type="text/javascript" src='../js/leaflet.mask.js'></script>
 </head>
 
@@ -33,25 +64,303 @@
     <div class="container wrapper d-flex align-items-center justify-content-center">
         <div id='map' style="height:600px;width:400px"></div>
     </div>
-    <script type="text/javascript">
-        var map = L.map("map", {
-            center: [41.615, 0.625],
-            zoom: 14
-        });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    <script>
+        var map = L.map('map').setView([41.615, 0.625], 14);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
         }).addTo(map);
 
-        L.mask('bound.json', { fillOpacity: 0.9 }).addTo(map);
+        var southWest = L.latLng(41.56, 0.54),
+            northEast = L.latLng(41.68, 0.71),
+            bounds = L.latLngBounds(southWest, northEast);
 
-		map.showMarkers();
-        map.showUserLocation();
-        map.removeMaskAtUserLocation();
-        map.centerMapToUserLocation();
-        map.setMaxMinZoom();
-        map.addStandardControls();
+        var coords = [
+            [ // Exterior Ring
+                [bounds.getSouth(), bounds.getWest()],
+                [bounds.getNorth(), bounds.getWest()],
+                [bounds.getNorth(), bounds.getEast()],
+                [bounds.getSouth(), bounds.getEast()],
+                [bounds.getSouth(), bounds.getWest()]
+            ]
+        ];
+
+        var fogPolygon = L.polygon(coords, { color: "#ccc", weight: 0, fillOpacity: 0.9 }).addTo(map);
+
+        var gridSize = 0.0003; // Ajusta la mida de la quadrícula segons sigui necessari
+        var lastUpdatedCoords = [];
+
+        // Definir contingut i coordenades dels marcadors
+        var markerContents = [
+            {
+                coords: [41.6147, 0.626672],
+                title: "Palau de la Paeria",
+                iconUrl: "../img/Icons/Monument.png",
+                tabs: [
+                    { title: "Informació", content: "L'edifici, seu de l’Ajuntament de Lleida, data del segle XIII i, malgrat que les seves característiques arquitectòniques originals queden difuminades per les remodelacions a les que s’ha vist sotmès, es un model distintiu de l’arquitectura romànica civil catalana." },
+                    { title: "Sabies què...?", contentText: "Al saló del retaule hi ha el retaule de la Verge dels Paers. Es tracta d'una sensacional obra del segle XV.", contentImage: "../img/SabiesQue/Paeria/Paeria.jpg" }
+                ]
+            },
+            {
+                coords: [41.6117, 0.6212],
+                title: "Oratori de la Puríssima Sang",
+                iconUrl: "../img/Icons/Church.png",
+                tabs: [
+                    { title: "Informació", content: "Petita església de la que es conserva, únicament, la portada Renaixentista. Consisteix en una composició de dos cossos amb figuracions fantàstiques de relleus anomenades grutescos. L'aspecte que presenta avui aquest temple és obra d’una reforma realitzada entre 1869 i 1875." },
+                    { title: "Sabies què...?", contentText: "Si entres i mires al sostre pots veure una de les peces d'art més valuoses del segle XIX a Lledia.", contentImage: "../img/SabiesQue/CapellaSang/CapellaSang.jpg" }
+                ]
+            },
+            {
+                coords: [41.6129, 0.6233],
+                title: "Catedral Nova",
+                iconUrl: "../img/Icons/Church.png",
+                tabs: [
+                    { title: "Informació", content: "Catedral d'estil barroc amb tendència al classicisme academicista, construït entre 1761 i 1781 per substituir la Seu Vella, que havia estat convertida en caserna militar. Tot i les diferents destruccions i espolis que ha patit, la Seu Nova de Lleida conserva en el seu interior importants conjunts artístics i decoratius, com les pintures murals, els vitralls o els ornaments litúrgics." },
+                    { title: "Sabies què...?", contentText: "Al seu interior es conserva la Mare de Déu del Blau, esculpida l'any 1447 per Jordi Safont. La llegenda diu que en veure la qualitat de l'obra, el seu mestre, en un atac d'ira, va llençar un martell a l'escultura, donant orígen al blau que es pot observar a la seva front.", contentImage: "../img/SabiesQue/CatedralNova/VergeBlau.jpg" }
+                ]
+            },
+            {
+                coords: [41.61275, 0.6235],
+                title: "Antic Hospital de Santa Maria",
+                iconUrl: "../img/Icons/Monument.png",
+                tabs: [
+                    { title: "Informació", content: "Obra insigne de l'arquitectura gòtica civil catalana. Construït entre els segles XV i XVI  és un dels edificis més antics i emblemàtics de la ciutat de Lleida. Es tracta d'un edifici de planta quadrada, de planta baixa i dos pisos, organitzat entorn d'un pati central. Les façanes, d’una gran austeritat i composició equilibrada, són properes a les formes renaixentistes. \n Actualment és la seu de l’Institut d'Estudis Lleidatans." },
+                    { title: "Sabies què...?", contentText: "Si mires al mig de l'ampit de la galeria nord del pati, podràs observar un relleu de la Mare de Déu entronitzada i el Nen.", contentImage: "../img/SabiesQue/CapellaSang/CapellaSang.jpg" }
+                ]
+            },
+            {
+                coords: [41.613219, 0.623394],
+                title: "Residència Pare Coll",
+                iconUrl: "../img/Icons/Building.png",
+                tabs: [
+                    { title: "Informació", content: "Antiga residència escolar femenina construïda l’any 1929. Des de l’exterior es pot observar la composició sòbria, de línies rectes, amb predomini d'estil clàssic." },
+                    { title: "Sabies què...?", contentText: "Destaca especialment el pati obert al carrer.", contentImage: "../img/SabiesQue/PareColl/PareColl.jpg" }
+                ]
+            },
+            {
+                coords: [41.61339, 0.62452],
+                title: "Casa Magí Llorenç",
+                iconUrl: "../img/Icons/Building.png",
+                tabs: [
+                    { title: "Informació", content: "Construïda l’any 1907 i obra de l'arquitecte Francisco Lamolla i Morante. és un edifici d'estil modernista que ressalta pel tractament artístic de la façana. Destaquen la tribuna, els balcons i els motius florals de pedra de la planta baixa." },
+                    { title: "Sabies què...?", contentText: "Un altre dels seus encants són les pintures murals del vestíbul, accessible en horari comercial.", contentImage: "../img/SabiesQue/MagiLlorenç/MagiLlorenç.jpg" }
+                ]
+            },
+            {
+                coords: [41.61343, 0.62467],
+                title: "Capella del Peu del Romeu",
+                iconUrl: "../img/Icons/Church.png",
+                tabs: [
+                    { title: "Informació", content: "Edifici de planta quadrangular, de petites dimensions, situat en ple carrer Major. Exteriorment trobem dues faÇanes: la principal, amb un arc de mig punt coronat per la Mare de Deu de les Neus i flanquejada per dues figures de l’apòstol Sant Jaume i de Sant Joan Baptista (patró del bisbat de Lleida), i la que dóna al carrer Cavallers, amb dues obertures de mig punt, una més gran que l’altra, coronada, la més gran, per un petit òcul." },
+                    { title: "Sabies què...?", contentText: "A l'interior hi ha una imatge de Sant Jaume que mostra la popular llegenda del miracle de la punxa que l'apòstol es va clavar al peu i es va poder treure amb l'auxili de la llum dels fanalets dels àngels i dels nens de la ciutat de Lleida. Aquesta imatge encapçala la tradicional Romeria dels Fanalets (24 de juliol).", contentImage: "../img/SabiesQue/PeuRomeu/PeuRomeu.jpg" }
+                ]
+            }
+
+        ];
+
+        // Funció per crear el contingut del popup amb pestanyes
+        function createPopupContent(markerContent) {
+            var container = document.createElement('div');
+            container.className = 'popup-container';
+
+            var title = document.createElement('div');
+            title.innerHTML = markerContent.title;
+            title.style.fontWeight = 'bold';
+            container.appendChild(title);
+
+            var tabList = document.createElement('div');
+            tabList.className = 'popup-tabs';
+
+            var contentList = document.createElement('div');
+
+            markerContent.tabs.forEach(function (tab, index) {
+                var tabButton = document.createElement('div');
+                tabButton.className = 'popup-tab' + (index === 0 ? ' active' : '');
+                tabButton.innerHTML = tab.title;
+                tabButton.dataset.index = index;
+
+                var content = document.createElement('div');
+                content.className = 'popup-content' + (index === 0 ? ' active' : '');
+
+                // Aquí afegim el text i la imatge a la pestanya "Sabies què...?"
+                if (tab.title === 'Sabies què...?') {
+                    // Creem un paràgraf per al text
+                    var textParagraph = document.createElement('p');
+                    textParagraph.innerHTML = tab.contentText; // Aquí assigna el text desitjat
+                    content.appendChild(textParagraph);
+
+                    // Creem un element d'imatge per a la imatge
+                    var imageElement = document.createElement('img');
+                    imageElement.src = tab.contentImage; // Aquí assigna la URL de la imatge
+                    imageElement.style.maxWidth = '100%'; // Ajustem la mida de la imatge
+                    content.appendChild(imageElement);
+                } else {
+                    content.innerHTML = tab.content;
+                }
+
+                tabButton.addEventListener('click', function () {
+                    var allTabs = container.querySelectorAll('.popup-tab');
+                    var allContents = container.querySelectorAll('.popup-content');
+
+                    allTabs.forEach(function (tab) { tab.classList.remove('active'); });
+                    allContents.forEach(function (content) { content.classList.remove('active'); });
+
+                    tabButton.classList.add('active');
+                    content.classList.add('active');
+                });
+
+                tabList.appendChild(tabButton);
+                contentList.appendChild(content);
+            });
+
+            container.appendChild(tabList);
+            container.appendChild(contentList);
+
+            return container;
+        }
+
+
+        // Crear i afegir marcadors al mapa (inicialment amagats)
+        var markers = markerContents.map(function (markerContent) {
+            var icon = L.icon({
+                iconUrl: markerContent.iconUrl,
+                iconSize: [20, 20], // Aquí pots ajustar la mida de la icona
+                iconAnchor: [16, 20], // Punt d'ancoratge de la icona, ajusta-ho segons sigui necessari
+                popupAnchor: [0, -20] // Punt d'ancoratge del popup, ajusta-ho segons sigui necessari
+            });
+            var marker = L.marker(markerContent.coords, { icon: icon }).addTo(map);
+            marker.bindPopup(createPopupContent(markerContent));
+            marker.setOpacity(0);
+            return marker;
+        });
+
+
+        // Funció per crear forat en una cel·la de la quadrícula
+        function createHoleInGrid(lat, lng) {
+            var gridLat = Math.floor(lat / gridSize) * gridSize;
+            var gridLng = Math.floor(lng / gridSize) * gridSize;
+
+            var holeCoords = [
+                [gridLat, gridLng],
+                [gridLat + gridSize, gridLng],
+                [gridLat + gridSize, gridLng + gridSize],
+                [gridLat, gridLng + gridSize],
+                [gridLat, gridLng]
+            ];
+
+            // Comprovar si el forat ja existeix
+            var exists = coords.some(function (hole) {
+                return areCoordsSame(hole, holeCoords);
+            });
+
+            if (!exists) {
+                coords.push(holeCoords);
+            }
+        }
+
+        // Funció per comprovar si dues coordenades són les mateixes
+        function areCoordsSame(coords1, coords2) {
+            if (coords1.length !== coords2.length) {
+                return false;
+            }
+            for (var i = 0; i < coords1.length; i++) {
+                if (coords1[i][0] !== coords2[i][0] || coords1[i][1] !== coords2[i][1]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Funció per comprovar si un punt està dins d'un polígon
+        function isPointInsidePolygon(point, polygon) {
+            var x = point[0], y = point[1];
+            var inside = false;
+
+            for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+                var xi = polygon[i][0], yi = polygon[i][1];
+                var xj = polygon[j][0], yj = polygon[j][1];
+                var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                if (intersect) {
+                    inside = !inside;
+                }
+            }
+            return inside;
+        }
+
+        // Funció per actualitzar la visibilitat dels marcadors
+        function updateMarkersVisibility() {
+            markers.forEach(function (marker) {
+                var markerPos = marker.getLatLng();
+                var markerCoords = [markerPos.lat, markerPos.lng];
+                var isVisible = coords.slice(1).some(function (hole) { // Saltem l'anell exterior
+                    return isPointInsidePolygon(markerCoords, hole);
+                });
+                marker.setOpacity(isVisible ? 1 : 0); // Mostra o amaga el marcador segons la visibilitat
+            });
+        }
+
+        // Defineix el cercle com a variable global
+        var userCircle;
+
+        // Funció per actualitzar les coordenades
+        function updateLocation() {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                var accuracy = position.coords.accuracy;
+
+                createHoleInGrid(lat, lng);
+
+                var coordsChanged = areCoordsDifferent(lastUpdatedCoords, coords);
+
+                if (coordsChanged) {
+                    fogPolygon.setLatLngs(coords);
+                    lastUpdatedCoords = coords.map(function (coord) {
+                        return coord.slice();
+                    });
+                    updateMarkersVisibility(); // Actualitza la visibilitat dels marcadors
+                }
+
+                // Afegeix un cercle per representar la ubicació de l'usuari
+                var newCircle = L.circle([lat, lng], {
+                    fillColor: '#ede9ef',
+                    fillOpacity: 0.5,
+                    radius: 0.1
+                }).addTo(map);
+            
+                 // Elimina el cercle anterior
+                if (userCircle) {
+                    map.removeLayer(userCircle);
+                }
+
+                // Assigna el nou cercle com a cercle de l'usuari
+                userCircle = newCircle;
+            });
+        }
+
         
 
+        // Funció per comprovar si les coordenades han canviat
+        function areCoordsDifferent(coords1, coords2) {
+            if (coords1.length !== coords2.length) {
+                return true;
+            }
+            for (var i = 0; i < coords1.length; i++) {
+                if (coords1[i].length !== coords2[i].length) {
+                    return true;
+                }
+                for (var j = 0; j < coords1[i].length; j++) {
+                    if (coords1[i][j][0] !== coords2[i][j][0] || coords1[i][j][1] !== coords2[i][j][1]) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        setInterval(updateLocation, 500);
     </script>
+</body>
 
 </html>
